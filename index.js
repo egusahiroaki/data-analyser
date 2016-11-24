@@ -19,6 +19,9 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({width: 400, height: 300 });
     mainWindow.loadURL(mainAddr);
 
+    // デバッグツール
+    mainWindow.webContents.openDevTools();
+
     // 終了処理
     mainWindow.on('closed', function() {
       mainWindow = null;
@@ -31,6 +34,12 @@ app.on('ready', function() {
       .then(function(htmlString) {
         console.log('server started');
         openWindow();
+
+        // python側の標準出力
+        subpy.stdout.on('data', function (data) {
+          console.log('stdout: ' + data);
+        });
+
       })
       .catch(function(err) {
         startUp();
